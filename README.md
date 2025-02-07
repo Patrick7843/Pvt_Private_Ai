@@ -1,50 +1,114 @@
-# React + TypeScript + Vite
+# AlvanAI Private Chat
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A sophisticated AI chat application that leverages both OpenAI and Google's Gemini AI models. Built with React, TypeScript, and Vite, this application offers a modern, responsive interface for AI interactions with support for both text and image inputs.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🤖 Dual AI Model Support (OpenAI & Gemini)
+- 🖼️ Image Analysis Capabilities
+- 💬 Real-time Streaming Responses
+- 🎨 Syntax Highlighting for Code
+- 📱 Responsive Design
+- 🔐 Authentication System
+- 📝 Markdown Support
 
-## Expanding the ESLint configuration
+## Prerequisites
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- Node.js (v16 or higher)
+- npm or yarn
+- Git
 
-- Configure the top-level `parserOptions` property like this:
+## Getting Started
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### Clone the Repository
+
+```bash
+git clone git@github.com:Patrick7843/Pvt_Private_Ai.git
+cd Pvt_Private_Ai
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### Environment Setup
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+Create a `.env` file in the root directory with the following variables:
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```env
+VITE_OPENAI_API_KEY=your_openai_api_key
+VITE_OPENAI_BASE_URL=your_openai_base_url
+VITE_GEMINI_PUBLIC_KEY=your_gemini_api_key
 ```
+
+### Installation
+
+#### For Windows:
+
+```cmd
+npm install
+npm run dev
+```
+
+#### For Linux/MacOS:
+
+```bash
+npm install
+npm run dev
+```
+
+The application will be available at `http://localhost:5173`
+
+### Build for Production
+
+```bash
+npm run build
+npm run preview
+```
+
+## Project Structure
+
+```
+src/
+├── assets/        # Static assets and styles
+├── components/    # Reusable UI components
+├── lib/          # Library configurations
+├── pages/        # Application pages
+├── services/     # API and service integrations
+├── store/        # State management
+└── types/        # TypeScript type definitions
+```
+
+## Technical Stack
+
+- **Frontend Framework:** React 18
+- **Language:** TypeScript
+- **Build Tool:** Vite
+- **Styling:** SASS/SCSS
+- **State Management:** Zustand
+- **Authentication:** Clerk
+- **AI Models:** OpenAI API & Google Gemini
+- **Markdown:** react-markdown
+- **Code Highlighting:** react-syntax-highlighter
+
+## Key Features Explained
+
+### Dual AI Model Support
+The application seamlessly switches between OpenAI and Gemini models based on configuration, ensuring reliable AI responses.
+
+### Real-time Streaming
+Implements real-time response streaming for a more interactive chat experience.
+
+### Code Highlighting
+Supports syntax highlighting for multiple programming languages with line numbers and copy functionality.
+
+### Authentication
+Secure user authentication system integrated with Clerk.
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
