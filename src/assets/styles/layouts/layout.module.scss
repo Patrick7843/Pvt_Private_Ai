@@ -1,0 +1,106 @@
+@use "../variables.scss" as *;
+@use "../breakpoints.scss" as breakpoints;
+
+.rootLayout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  .navBar_dashboard {
+    display: flex;
+    header {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      z-index: 10;
+      height:64px;
+
+      .logo_cont {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        gap: 8px;
+        font-size: 24px;
+        color: $font-white;
+        .logo {
+          height: 32px;
+          width: 32px;
+        }
+      }
+      .header_left {
+        display: flex;
+        .buttons {
+          display: flex;
+          button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: $grey;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background 100ms;
+            padding: 8px;
+            &:hover {
+              background-color: #2f2f2f;
+            }
+            &:first-child {
+              svg {
+                
+                &:first-child {
+                  display: block;
+                  @include breakpoints.smm {
+                    display: none;
+                  }
+                }
+                &:last-child {
+                  display: none;
+                  @include breakpoints.smm {
+                    display: block;
+                  }
+                }
+              }
+            }
+            &:last-child{
+              @include breakpoints.smm{
+                display: none;
+              }
+            }
+            svg {
+              height: 24px;
+              width: 24px;
+            }
+          }
+        }
+        .dashboard_logo {
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 18px;
+          color: $grey;
+          font-weight: 600;
+          padding: 6px 12px;
+          border-radius: 8px;
+          transition: background 100ms;
+          &:hover {
+            background-color: #2f2f2f;
+          }
+        }
+      }
+      .user {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+      }
+    }
+  }
+
+  main {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+}

@@ -1,0 +1,77 @@
+<svg width="910" height="910" viewBox="0 0 53.3 53.3" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <!-- Gradient for circles -->
+        <linearGradient id="circleGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#FF6B6B">
+                <animate attributeName="stop-color" 
+                    values="#FF6B6B; #4ECDC4; #45B7D1; #96C93D; #FF6B6B"
+                    dur="8s" 
+                    repeatCount="indefinite"/>
+            </stop>
+            <stop offset="100%" stop-color="#4ECDC4">
+                <animate attributeName="stop-color" 
+                    values="#4ECDC4; #45B7D1; #96C93D; #FF6B6B; #4ECDC4"
+                    dur="8s" 
+                    repeatCount="indefinite"/>
+            </stop>
+        </linearGradient>
+
+        <!-- Gradient for A symbol -->
+        <linearGradient id="aGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#FF6B6B">
+                <animate attributeName="stop-color" 
+                    values="#FF6B6B; #4ECDC4; #45B7D1; #96C93D; #FF6B6B"
+                    dur="6s" 
+                    repeatCount="indefinite"/>
+            </stop>
+            <stop offset="100%" stop-color="#4ECDC4">
+                <animate attributeName="stop-color" 
+                    values="#4ECDC4; #45B7D1; #96C93D; #FF6B6B; #4ECDC4"
+                    dur="6s" 
+                    repeatCount="indefinite"/>
+            </stop>
+        </linearGradient>
+        
+        <style>
+            .a-shape { 
+                fill: url(#aGradient);
+            }
+            .circle-shape { 
+                fill: none; 
+                stroke: url(#circleGradient);
+                stroke-width: 1.5;
+                stroke-dasharray: 4 2;
+                transform-box: fill-box;
+                transform-origin: center;
+            }
+            @keyframes rotate {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+            .rotating {
+                animation: rotate 12s linear infinite;
+                will-change: transform;
+            }
+            .reverse-rotating {
+                animation: rotate 15s linear infinite reverse;
+                will-change: transform;
+            }
+        </style>
+    </defs>
+    
+    <!-- Outer circle -->
+    <circle class="circle-shape rotating"
+            cx="26.65" 
+            cy="26.65" 
+            r="24"/>
+            
+    <!-- Inner circle -->
+    <circle class="circle-shape reverse-rotating"
+            cx="26.65" 
+            cy="26.65" 
+            r="20"/>
+    
+    <!-- Gradient A symbol -->
+    <path class="a-shape" 
+          d="M17.55 41.6L23.14 29.25H30.16L35.75 41.6H40.3L26.65 10.4L13 41.6H17.55ZM24.44 26L26.65 20.15L28.86 26H24.44Z"/>
+</svg>

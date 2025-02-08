@@ -1,0 +1,84 @@
+@use "../variables.scss" as *;
+
+.modelSelector {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.selectorButton {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  width: 100%;
+  color: $font-white;
+  gap: 0.625rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.modelName {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  width: 69%;
+  height: 100%;
+  font-size: 1rem;
+  color: $font-white;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: $dark-grey;
+  border: 1px solid $mid-grey;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+  z-index: 1000;
+  padding: 0.5rem;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $mid-grey;
+    border-radius: 3px;
+  }
+}
+
+.modelOption {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  text-align: left;
+  background: none;
+  border: none;
+  color: $font-white;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  &.selected {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+}
+
+.noModels {
+  padding: 0.5rem;
+  color: $grey;
+  text-align: center;
+} 
