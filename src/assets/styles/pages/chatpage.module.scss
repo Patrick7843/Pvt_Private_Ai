@@ -5,6 +5,8 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
+  height: 100vh;
+  overflow: hidden;
   .AIIcon {
     height: 100%;
     width: 2rem;
@@ -28,6 +30,38 @@
     max-width: 48rem;
     width: 100%;
     padding-bottom: 2.25rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    scrollbar-gutter: stable;
+    will-change: transform;
+    transform: translateZ(0);
+    -webkit-overflow-scrolling: touch;
+    
+    &::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      margin: 4px 0;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      transition: background-color 0.2s ease;
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+    }
+
+    .wrapper {
+      transform: translateZ(0);
+      backface-visibility: hidden;
+    }
     .wrapper {
       display: flex;
       flex-direction: column;
@@ -205,7 +239,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-
       width: 32px;
       aspect-ratio: 1/1;
       border-radius: 999px;
@@ -213,9 +246,26 @@
       border: 0.5px solid hsla(0, 0%, 100%, 0.05);
       position: sticky;
       left: 50%;
-      transform: translateX(-50%);
-      bottom: 20px;
+      transform: translateX(-50%) translateY(20px);
+      bottom: 80px;
+      margin-bottom: -60px;
       cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 50;
+      pointer-events: auto;
+      
+      &.visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(0);
+      }
+      
+      &:hover {
+        background-color: #2a2a2a;
+      }
+      
       svg {
         height: 18px;
         width: 18px;

@@ -4,17 +4,28 @@ import style from "../../assets/styles/pages/chatpage.module.scss";
 
 type props = {
   scrollRef: React.RefObject<HTMLDivElement>;
+  onScrollDown: () => void;
 }
 
-const ScrollDown = ({scrollRef}:props) => {
+const ScrollDown = ({scrollRef, onScrollDown}:props) => {
   const [isInView, setIsInView] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsInView(entry.isIntersecting);
+        // Add a small delay before hiding to make the transition smoother
+        if (entry.isIntersecting) {
+          setTimeout(() => setIsVisible(false), 200);
+        } else {
+          setIsVisible(true);
+        }
       },
-      { threshold: 1.0 }
+      { 
+        threshold: 0.8,  // Trigger earlier for smoother experience
+        rootMargin: '-20px' // Add a small margin to prevent flickering
+      }
     );
 
     if (scrollRef.current) {
@@ -28,16 +39,12 @@ const ScrollDown = ({scrollRef}:props) => {
     };
   }, []);
   return (
-    !isInView && (
-      <div
-        className={style.arrow_down}
-        onClick={() =>
-          scrollRef.current?.scrollIntoView({ behavior: "smooth" })
-        }
-      >
-        <ArrowDown />
-      </div>
-    )
+    <div
+      className={`${style.arrow_down} ${isVisible ? style.visible : ''}`}
+      onClick={onScrollDown}
+    >
+      <ArrowDown />
+    </div>
   );
 };
 

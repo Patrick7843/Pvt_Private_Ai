@@ -127,7 +127,7 @@ const InputForm = () => {
                   setText(e.target.value);
                   handleInput();
                 }}
-                placeholder="Message ChatGPT"
+                placeholder="Message Alvan Ai"
                 rows={1}
               />
             </div>
