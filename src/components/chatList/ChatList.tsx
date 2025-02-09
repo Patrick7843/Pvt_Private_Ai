@@ -11,8 +11,6 @@ import { useCurrentChatId } from "../../store/currectChatId";
 import ChatListList from "./ChatListList";
 import { useState } from "react";
 import UpgradeDialog from "../UpgradeDialog";
-import ModelSelector from "../ModelSelector";
-
 const ChatList = () => {
   const { open, setOpen } = useOpen();
   const { clearCurrentChatId } = useCurrentChatId();
@@ -64,7 +62,6 @@ const ChatList = () => {
                   <div className={style.newChatLogo}>
                     <Logo />
                   </div>
-                  <ModelSelector />
                   <div className={style.copyIcon}>
                     <Copy />
                   </div>

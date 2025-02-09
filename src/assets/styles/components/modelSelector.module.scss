@@ -2,37 +2,42 @@
 
 .modelSelector {
   position: relative;
-  display: inline-block;
-  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
 }
 
 .selectorButton {
   display: flex;
   align-items: center;
   background-color: transparent;
-  border: none;
-  width: 100%;
+  border: 1px solid $mid-grey;
+  border-radius: 6px;
   color: $font-white;
   gap: 0.625rem;
   cursor: pointer;
-  padding: 0;
+  padding: 8px 12px;
+  height: 100%;
+  transition: background-color 0.2s;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
 }
 
 .modelName {
   display: flex;
   align-items: center;
-  justify-content: start;
-  width: 69%;
-  height: 100%;
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: $font-white;
+  white-space: nowrap;
 }
 
 .dropdown {
   position: absolute;
   top: 100%;
-  left: 0;
-  width: 100%;
+  right: 0;
+  min-width: 200px;
   max-height: 200px;
   overflow-y: auto;
   background-color: $dark-grey;
