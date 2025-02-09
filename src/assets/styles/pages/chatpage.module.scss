@@ -29,32 +29,40 @@
     flex-direction: column;
     max-width: 48rem;
     width: 100%;
+    height: calc(100vh - 180px);
     padding-bottom: 2.25rem;
-    overflow-y: auto;
-    overflow-x: hidden;
-    scroll-behavior: smooth;
-    scrollbar-gutter: stable;
     will-change: transform;
     transform: translateZ(0);
-    -webkit-overflow-scrolling: touch;
     
-    &::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    
-    &::-webkit-scrollbar-track {
-      background: transparent;
-      margin: 4px 0;
-    }
-    
-    &::-webkit-scrollbar-thumb {
-      background-color: rgba(255, 255, 255, 0.1);
-      border-radius: 3px;
-      transition: background-color 0.2s ease;
-      
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.2);
+    :global {
+      .scroll-to-bottom {
+        height: 100%;
+      }
+
+      .scroll-to-bottom__container {
+        scroll-behavior: smooth;
+        scrollbar-gutter: stable;
+        scrollbar-width: thin;
+
+        &::-webkit-scrollbar {
+          width: 6px;
+          height: 6px;
+        }
+        
+        &::-webkit-scrollbar-track {
+          background: transparent;
+          margin: 4px 0;
+        }
+        
+        &::-webkit-scrollbar-thumb {
+          background-color: rgba(255, 255, 255, 0.1);
+          border-radius: 3px;
+          transition: background-color 0.2s ease;
+          
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+          }
+        }
       }
     }
 
@@ -236,30 +244,27 @@
       }
     }
     .arrow_down {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      aspect-ratio: 1/1;
-      border-radius: 999px;
-      background-color: #212121;
-      border: 0.5px solid hsla(0, 0%, 100%, 0.05);
-      position: sticky;
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      bottom: 80px;
-      margin-bottom: -60px;
-      cursor: pointer;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      z-index: 50;
-      pointer-events: auto;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 32px !important;
+      height: 32px !important;
+      border-radius: 999px !important;
+      background-color: #212121 !important;
+      border: 0.5px solid hsla(0, 0%, 100%, 0.05) !important;
+      position: fixed !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      bottom: 100px !important;
+      cursor: pointer !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out !important;
+      z-index: 1000 !important;
       
-      &.visible {
-        opacity: 1;
-        visibility: visible;
-        transform: translateX(-50%) translateY(0);
+      &[data-scrolling="true"] {
+        opacity: 1 !important;
+        visibility: visible !important;
       }
       
       &:hover {

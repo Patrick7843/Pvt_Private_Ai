@@ -4,8 +4,9 @@ import style from "../../assets/styles/pages/chatpage.module.scss";
 import { useChat } from "../../store/chat";
 import Markdown from "react-markdown";
 import { tomorrowNightBright } from "react-syntax-highlighter/dist/esm/styles/hljs";
-import { useEffect, useRef, useState } from "react";
-import ScrollDown from "./ScrollDown";
+import { useEffect, useState } from "react";
+import ScrollToBottom from 'react-scroll-to-bottom';
+import ArrowDown from "../../assets/icons/ArrowDown";
 import { useLoading } from "../../store/chatLoading";
 import LoaderDot from "../../assets/icons/animated/LoaderDot";
 import Copy2 from "../../assets/icons/Copy2";
@@ -19,48 +20,7 @@ const Chat = () => {
   const { loading } = useLoading();
   const location = useLocation();
   const { setCurrentChatId } = useCurrentChatId();
-  const scrollRef = useRef<HTMLDivElement | null>(null);
-  const chatContainerRef = useRef<HTMLDivElement | null>(null);
-  const [isNearBottom, setIsNearBottom] = useState(true);
-  const [userScrolled, setUserScrolled] = useState(false);
-  const [autoScrollEnabled, setAutoScrollEnabled] = useState(true);
-
-  const handleScroll = () => {
-    if (!chatContainerRef.current) return;
-    
-    const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
-    const scrollPosition = scrollHeight - scrollTop - clientHeight;
-    const isBottom = scrollPosition < 100; // Consider "near bottom" if within 100px
-    
-    setIsNearBottom(isBottom);
-    if (!isBottom && !loading) {
-      setUserScrolled(true);
-      setAutoScrollEnabled(false);
-    }
-  };
-
   useEffect(() => {
-    const chatContainer = chatContainerRef.current;
-    if (chatContainer) {
-      chatContainer.addEventListener('scroll', handleScroll);
-      return () => chatContainer.removeEventListener('scroll', handleScroll);
-    }
-  }, []);
-
-  useEffect(() => {
-    // Reset auto-scroll when new messages arrive or during loading
-    if (loading || chats.length === 0) {
-      setAutoScrollEnabled(true);
-      setUserScrolled(false);
-    }
-
-    // Use RAF to ensure we have latest scroll heights
-    requestAnimationFrame(() => {
-      if (autoScrollEnabled || isNearBottom) {
-        scrollDownFunc();
-      }
-    });
-    
     getIdFromUrl(false);
   }, [chats, loading, location.pathname, streamingText]);
 
@@ -80,67 +40,7 @@ const Chat = () => {
     }
   };
 
-  const scrollDownFunc = () => {
-    if (!chatContainerRef.current) return;
-    
-    const container = chatContainerRef.current;
-    const scrollHeight = container.scrollHeight;
-    const clientHeight = container.clientHeight;
-    const start = container.scrollTop;
-    const end = scrollHeight - clientHeight;
-    
-    // Calculate duration based on distance
-    const distance = Math.abs(end - start);
-    const minDuration = loading ? 50 : 200;
-    const maxDuration = loading ? 150 : 400;
-    const duration = Math.min(maxDuration, 
-      Math.max(minDuration, distance * 0.5)
-    );
 
-    let lastTime = performance.now();
-    let currentPosition = start;
-    let velocity = 0;
-    const damping = 0.85; // Momentum damping factor
-
-    const animateScroll = (currentTime: number) => {
-      const deltaTime = currentTime - lastTime;
-      lastTime = currentTime;
-      
-      const targetPosition = end;
-      const distanceToTarget = targetPosition - currentPosition;
-      
-      // Apply spring physics
-      const spring = 0.2;
-      const acceleration = distanceToTarget * spring;
-      
-      velocity = (velocity + acceleration) * damping;
-      currentPosition += velocity;
-
-      if (container) {
-        container.scrollTop = currentPosition;
-      }
-
-      const isNearTarget = Math.abs(distanceToTarget) < 1 && Math.abs(velocity) < 0.1;
-      
-      if (!isNearTarget && autoScrollEnabled) {
-        requestAnimationFrame(animateScroll);
-      } else {
-        // Ensure we reach exact target
-        if (container) container.scrollTop = end;
-        setUserScrolled(false);
-        setAutoScrollEnabled(true);
-      }
-    };
-
-    requestAnimationFrame(animateScroll);
-  };
-
-  // Enable auto-scroll when user clicks the scroll button
-  const enableAutoScroll = () => {
-    setAutoScrollEnabled(true);
-    setUserScrolled(false);
-    scrollDownFunc();
-  };
 
   const MarkdownWithSyntax = ({ content }: { content: string }) => {
     const [copiedBlocks, setCopiedBlocks] = useState<{ [key: string]: boolean }>({});
@@ -239,10 +139,13 @@ const Chat = () => {
 
   return (
     <div className={style.chatPage}>
-      <div 
-        className={style.chat} 
-        ref={chatContainerRef}
-        style={{ height: 'calc(100vh - 180px)', overflowY: 'auto' }}
+      <ScrollToBottom 
+        className={style.chat}
+        followButtonClassName={style.arrow_down}
+        initialScrollBehavior="auto"
+        mode="bottom"
+        followButtonChildren={<ArrowDown />}
+        debounce={100}
       >
         {chats.map((message, i) => {
           return message.Role === "user" ? (
@@ -301,9 +204,7 @@ const Chat = () => {
             </div>
           </div>
         )}
-        <div ref={scrollRef}></div>
-        <ScrollDown scrollRef={scrollRef} onScrollDown={enableAutoScroll} />
-      </div>
+      </ScrollToBottom>
     </div>
   );
 };

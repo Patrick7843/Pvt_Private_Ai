@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import style from "../assets/styles/components/inputForm.module.scss";
 import ArrowUp from "../assets/icons/ArrowUp";
+import { useModelStore, isFluxModel } from "../store/modelStore";
+import { generateImage } from "../services/imageGenerationService";
 import Upload from "../services/Upload";
 import { ImgState } from "../types/types";
 import { IKImage } from "imagekitio-react";
@@ -20,6 +22,7 @@ import { useCurrentChatId } from "../store/currectChatId";
 
 const InputForm = () => {
   const [text, setText] = useState<string>("");
+  const [tempID, setTempID] = useState<string>("");
   const { chats, addChat } = useChat();
   const { loading, setLoading } = useLoading();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -47,30 +50,76 @@ const InputForm = () => {
     setImg({ isLoading: false, error: "", dbData: {}, aiData: { inlineData: { data: "", mimeType: "" } } });
   };
 
+  const { selectedModel } = useModelStore();
+  const [imageGenerating, setImageGenerating] = useState(false);
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const prop = text.trim();
     if (!prop && !img.dbData.url) return;
     setLoading(true);
-    let tempID = "";
+
+    // Create new chat if needed
+    if (!chats.length && user) {
+      const response = await createNewChat(user.id, prop.substring(0, 50));
+      if (response) {
+        addChatToChatList(response);
+        setCurrentChatId(response.ID);
+        setTempID(response.ID);
+        navigate(`/dashboard/chats/${response.ID}`);
+      }
+    }
+
+    // Handle FLUX image generation
+    if (isFluxModel(selectedModel)) {
+      setImageGenerating(true);
+      try {
+        const imageResponse = await generateImage({
+          // Image generation parameters
+          model_name: "FLUX.1-dev",
+          prompt: prop,
+          steps: 30,
+          cfg_scale: 5,
+          enable_refiner: false,
+          height: 1024,
+          width: 1024,
+          backend: "auto"
+        });
+
+        // Add user message with proper chat ID
+        const userMessage = { Role: "user", Parts: [{ Text: prop }] as [{ Text: string }], Image: "" };
+        addChat(userMessage);
+        uploadContent(userMessage, tempID || currentChatId);
+
+        // Add AI response with generated image and proper chat ID
+        const aiMessage = { 
+          Role: "model", 
+          Parts: [{ Text: "Here's your generated image:" }] as [{ Text: string }], 
+          Image: `data:image/png;base64,${imageResponse}` 
+        };
+        addChat(aiMessage);
+        uploadContent(aiMessage, tempID || currentChatId);
+        
+        setImageGenerating(false);
+        setLoading(false);
+        return;
+      } catch (error) {
+        console.error('Error generating image:', error);
+        setImageGenerating(false);
+        setLoading(false);
+        return;
+      }
+    }
+    
     setText("");
     handleInput();
     if (textareaRef.current) {
       textareaRef.current.style.height = "24px";
     }
-    if (!chats.length && user) {
-      const response = await createNewChat(user.id, prop.substring(0, 50));
-
-      if (response) {
-        addChatToChatList(response);
-        setCurrentChatId(response.ID);
-        tempID = response.ID;
-      }
-      navigate(`/dashboard/chats/${response.ID}`);
-    }
+    // Add user message
     const newHistory = { Role: "user", Parts: [{ Text: prop }] as [{ Text: string }], Image: img.dbData?.url ? img.dbData.url : "" };
     addChat(newHistory);
-    uploadContent(newHistory, tempID ? tempID : currentChatId);
+    uploadContent(newHistory, tempID || currentChatId);
     const imgCopy = { ...img };
     deleteImg(false);
     const { res } = await getResponse({ imgCopy, prop });
@@ -78,13 +127,19 @@ const InputForm = () => {
     setLoading(false);
     const modelReq = { Role: "model", Parts: [{ Text: res }] as [{ Text: string }], Image: "" };
     addChat(modelReq);
-    uploadContent(modelReq, tempID ? tempID : currentChatId);
+    uploadContent(modelReq, tempID || currentChatId);
   };
   
   return (
     <>
       <div className={style.main_cont}>
         <div className={style.input_field}>
+          {imageGenerating && (
+            <div className={style.generating_image}>
+              <Loader />
+              <span>Generating image...</span>
+            </div>
+          )}
           {img.isLoading ? (
             <div className={style.imgs_cont}>
               <Loader />
