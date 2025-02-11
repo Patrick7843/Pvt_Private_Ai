@@ -8,13 +8,11 @@ type props = {
 }
 
 const ScrollDown = ({scrollRef, onScrollDown}:props) => {
-  const [isInView, setIsInView] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsInView(entry.isIntersecting);
         // Add a small delay before hiding to make the transition smoother
         if (entry.isIntersecting) {
           setTimeout(() => setIsVisible(false), 200);
